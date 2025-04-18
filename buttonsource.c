@@ -50,12 +50,6 @@ void screen_on()
 #define COL3_GPIO GPIO_NUM_26
 #define COL4_GPIO GPIO_NUM_21
 
-//Define Finger Print Sensor --> RS558-S
-#define FPM_UART_PORT UART_NUM_1
-#define UARTTX_GPIO GPIO_NUM_15
-#define UARTRX_GPIO GPIO_NUM_16
-#define TOUCHOUT_GPIO GPIO_NUM_5
-#define BAUD_RATE 19200 
 
 //Long press for Clear button
 #define LONG_PRESS_TIME_MS 1000  // Define long press time in ms
@@ -123,27 +117,6 @@ void configure_buttons() {
 	    .intr_type = GPIO_INTR_DISABLE
 	};
 	
-	//Finger Print Sensor configuration
-	gpio_config_t uarttx_conf = {
-	    .pin_bit_mask = (1ULL << UARTTX_GPIO),
-	    .mode = GPIO_MODE_OUTPUT,
-	    .pull_up_en = GPIO_PULLUP_DISABLE,
-	    .intr_type = GPIO_INTR_DISABLE
-	};
-	
-	gpio_config_t uartrx_conf = {
-	    .pin_bit_mask = (1ULL << UARTRX_GPIO),
-	    .mode = GPIO_MODE_OUTPUT,
-	    .pull_up_en = GPIO_PULLUP_DISABLE,
-	    .intr_type = GPIO_INTR_DISABLE
-	};
-	
-	gpio_config_t touchout_conf = {
-	    .pin_bit_mask = (1ULL << TOUCHOUT_GPIO),
-	    .mode = GPIO_MODE_INPUT,
-	    .pull_up_en = GPIO_PULLUP_DISABLE,
-	    .intr_type = GPIO_INTR_POSEDGE
-	};
 	
     
     //Row pin GPIO CONFIG
@@ -160,34 +133,11 @@ void configure_buttons() {
 	gpio_config(&col4_conf);
     
     
-    //Finger Print Sensor configuration
-    gpio_config(&uarttx_conf);
-    gpio_config(&uartrx_conf);
-    gpio_config(&touchout_conf);
+   
     
     
 }
 
-void init_fingerprint_uart() { //initialising UART for the RS-558-S
-    uart_config_t uart_config = {
-        .baud_rate = BAUD_RATE,
-        .data_bits = UART_DATA_8_BITS,
-        .parity    = UART_PARITY_DISABLE,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
-    };
-
-    // Configure UART
-    uart_param_config(FPM_UART_PORT, &uart_config);
-
-    // Set TX and RX pins
-    uart_set_pin(1, 15, 16, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
-
-    // Install UART driver (RX buffer size, no event queue)
-    //uart_driver_install(FPM_UART_PORT, 2048, 0, 0, NULL, 0);
-
-    ESP_LOGI("UART", "Fingerprint UART initialized on TX=%d RX=%d",UARTTX_GPIO, UARTRX_GPIO);
-}
 
 void scan_keypad() {
     // Loop through all columns
@@ -338,10 +288,10 @@ void handle_key_action(int key) {
                 
 				input_number[input_index] = '\0';  // Null-terminate the string
 			
-				if (strcmp(input_number, "1234") == 0) {  // Replace "1234" with your correct code
-				        ssd1306_display_text(&dev, 0, "Access Granted!", 15, false);
+				if (strcmp(input_number, "ADD condition") == 0) {  // Replace "1234" with your correct code
+				       //Add action taken
 				    } else {
-				        ssd1306_display_text(&dev, 0, "Access Denied!", 15, false);
+				        //Add action taken
 				 }
 				break;
                 
@@ -395,7 +345,7 @@ void handle_key_action(int key) {
             case 'e':
                 // Action for e
                 printf("Button empty pressed\n");
-                //ssd1306_display_text(&dev, 0, "Empty", 1, false);
+                //empty button use for whatever
                 break;
                 
              // Continue for other buttons...
