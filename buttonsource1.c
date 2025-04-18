@@ -15,7 +15,7 @@
 #include <string.h>
 #include "driver/uart.h"
 #include<esp_log.h>
-//#include "i2c_master.h"
+//#include "i2c_master.h" // old i2c driver
 #include"driver/i2c_master.h"
 
 
